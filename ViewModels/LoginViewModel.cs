@@ -13,20 +13,37 @@ namespace AdvanceNavigation.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        private string _username = "";
 
-        NavigationStore nav_store;
+        public string Username { 
+            get {
+                return _username;
+            }
+            set {
+                _username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
 
+        private string _password = "";
+
+        public string Password { get {
+                return _password;
+            } 
+            set 
+            {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            } 
+        }
+
+     
        public  ICommand LoginCommand { get;  }
 
-        public LoginViewModel(AccountStore _accountStore, NavigationStore _navStore)
+        public LoginViewModel(AccountStore _accountStore, NavigationService<AccountViewModel> accountNavService)
         {
-            ParameterNavigationService<Account, AccountViewModel> navigationService = new ParameterNavigationService<Account, AccountViewModel>(
-                _navStore,
-                (_param) => new AccountViewModel(_accountStore, _navStore));
 
-            LoginCommand = new LoginCommand(this, _accountStore, navigationService);
+            LoginCommand = new LoginCommand(this, _accountStore, accountNavService);
         }
     }
 

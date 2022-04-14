@@ -13,6 +13,7 @@ namespace AdvanceNavigation.ViewModels
     public class AccountViewModel : ViewModelBase
     {
         private readonly AccountStore accountStore;
+     
 
         public string Username => accountStore.CurrentAccount.Username;
         public string Email => accountStore.CurrentAccount.Email;
@@ -20,13 +21,15 @@ namespace AdvanceNavigation.ViewModels
 
         public ICommand NavigateHomeCommand { get;  }
 
-        public AccountViewModel(AccountStore _accountStore, NavigationStore _navStore) {
+        public NavigationBarViewModel navigationBarViewModel;
+
+        public AccountViewModel(NavigationBarViewModel _navigationBarViewModel, AccountStore _accountStore, NavigationService<HomeViewModel> homeNavigationService) {
 
             accountStore = _accountStore;
 
-            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(
-                    _navStore, () => new HomeViewModel(accountStore, _navStore))
-                );
+            navigationBarViewModel = _navigationBarViewModel;
+
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(homeNavigationService);
         }
       
     } 

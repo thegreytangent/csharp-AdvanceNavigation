@@ -9,12 +9,18 @@ namespace AdvanceNavigation.Stores
 {
     public class AccountStore
     {
-        private Account _currentAccount;
+        public Account _currentAccount;
 
         public Account  CurrentAccount {
             get => _currentAccount;
-            set { _currentAccount = value;  } 
+            set { 
+                _currentAccount = value;
+            } 
         }
+
+        public bool isLoggedIn => _currentAccount != null;
+
+      
 
 
 

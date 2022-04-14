@@ -12,17 +12,14 @@ namespace AdvanceNavigation.ViewModels
     public class HomeViewModel : ViewModelBase
     {
         public string WelcomeMessage => "Welcome to my application";
-        AccountStore accountStore;
+      
+        public NavigationBarViewModel navigationBarViewModel { get;  }
+        
+        public ICommand NavigateloginCommand { get;  }
 
-
-        public ICommand NavigateAccountCommand { get;  }
-
-        public HomeViewModel(AccountStore _accountStore, NavigationStore _navStore) {
-            accountStore = _accountStore;
-
-            NavigateAccountCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                    _navStore,()=> new LoginViewModel(accountStore, _navStore))
-            );
+        public HomeViewModel(NavigationBarViewModel _navigationBarViewModel, NavigationService<LoginViewModel> loginNavService) {
+            navigationBarViewModel = _navigationBarViewModel;
+            NavigateloginCommand = new NavigateCommand<LoginViewModel>(loginNavService);
         }
     }
 }

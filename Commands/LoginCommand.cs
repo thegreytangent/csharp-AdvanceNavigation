@@ -13,20 +13,19 @@ namespace AdvanceNavigation.Commands
 {
     public class LoginCommand : CommandBase
     {
-
-        private readonly LoginViewModel viewModel;
         private readonly AccountStore accountStore;
-        private readonly ParameterNavigationService<Account, AccountViewModel> navigationService;
+        private readonly LoginViewModel viewModel;
+        private readonly NavigationService<AccountViewModel> navigationService;
 
         public LoginCommand(
             LoginViewModel _viewModel,
             AccountStore _accountStore,
-            ParameterNavigationService<Account, AccountViewModel> _navigationService
+            NavigationService<AccountViewModel> _navigationService
             )
         {
 
-            accountStore = _accountStore;
             viewModel = _viewModel;
+            accountStore = _accountStore;
             navigationService = _navigationService;
         }
 
@@ -40,8 +39,9 @@ namespace AdvanceNavigation.Commands
                 Email = $"{viewModel.Username}@test.com",
                 Username = viewModel.Username
             };
-            accountStore.CurrentAccount = account;
-            navigationService.Navigate(account);
+            this.accountStore.CurrentAccount = account;
+
+            navigationService.Navigate();
         
         }
     }
