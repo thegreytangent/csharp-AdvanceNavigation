@@ -18,18 +18,37 @@ namespace AdvanceNavigation.ViewModels
         public ICommand NavigateAccountCommand { get; }
         public ICommand NavigateLoginCommand { get; }
 
-        public bool isLoggedIn => store.isLoggedIn;
+        public ICommand LogoutCommand { get;  }
+
+        public bool isLoggedIn => store.IsLoggedIn;
 
         public NavigationBarViewModel(
             AccountStore _accountStore,
-            NavigationService<HomeViewModel> homeNavigationService,
-            NavigationService<AccountViewModel> accountNavigationService,
-            NavigationService<LoginViewModel> loginNavigationService
-            ) {
+            INavigationService homeNavigationService,
+            INavigationService accountNavigationService,
+            INavigationService loginNavigationService
+            )
+        {
             store = _accountStore;
-            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(homeNavigationService);
-            NavigateAccountCommand = new NavigateCommand<AccountViewModel>(accountNavigationService);
-            NavigateLoginCommand = new NavigateCommand<LoginViewModel>(loginNavigationService);
+            
+            LogoutCommand = new LogoutCommand(store);
+            NavigateHomeCommand = new NavigateCommand(homeNavigationService);
+            NavigateAccountCommand = new NavigateCommand(accountNavigationService);
+            NavigateLoginCommand = new NavigateCommand(loginNavigationService);
+
+            store.CurrentAccountChanged += OnCurrentAccountChanged;
+        
+        }
+
+        private void OnCurrentAccountChanged()
+        {
+            OnPropertyChanged(nameof(isLoggedIn));
+        }
+
+        public override void Dispose() {
+
+            store.CurrentAccountChanged -= OnCurrentAccountChanged;
+            base.Dispose();
         }
 
 

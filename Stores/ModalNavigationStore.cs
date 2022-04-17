@@ -7,25 +7,33 @@ using AdvanceNavigation.ViewModels;
 
 namespace AdvanceNavigation.Stores
 {
-    public class NavigationStore
+    public class ModalNavigationStore
     {
-
         public event Action CurrentViewModelChanged;
 
         private ViewModelBase _viewModel;
 
-        public ViewModelBase CurrentViewModel {
+        public ViewModelBase CurrentViewModel
+        {
             get => _viewModel;
-            set {
+            set
+            {
                 _viewModel?.Dispose();
                 _viewModel = value;
                 OnCurrentViewModelChanged();
             }
         }
 
+        public bool IsOpen => CurrentViewModel != null;
+
         private void OnCurrentViewModelChanged()
         {
             CurrentViewModelChanged?.Invoke();
         }
+
+        public void Close() {
+            CurrentViewModel = null;
+        }
+
     }
 }

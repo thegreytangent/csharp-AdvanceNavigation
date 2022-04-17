@@ -13,7 +13,7 @@ namespace AdvanceNavigation.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private string _username = "";
+        private string _username;
 
         public string Username { 
             get {
@@ -40,7 +40,7 @@ namespace AdvanceNavigation.ViewModels
      
        public  ICommand LoginCommand { get;  }
 
-        public LoginViewModel(AccountStore _accountStore, NavigationService<AccountViewModel> accountNavService)
+        public LoginViewModel(AccountStore _accountStore, INavigationService accountNavService)
         {
 
             LoginCommand = new LoginCommand(this, _accountStore, accountNavService);

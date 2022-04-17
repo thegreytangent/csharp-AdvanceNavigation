@@ -4,16 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdvanceNavigation"
+        xmlns:components="clr-namespace:AdvanceNavigation.Components"
         mc:Ignorable="d"
         xmlns:views="clr-namespace:AdvanceNavigation.Views"
-        xmlns:viewmodels ="clr-namespace:AdvanceNavigation.ViewModels"
+        xmlns:viewmodels ="clr-namespace:AdvanceNavigation.ViewModels" xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
         Title="MainWindow" 
         Height="450" 
         Width="800"
         >
 
-    <ContentControl Content="{Binding CurrentViewModel}">
-        <ContentControl.Resources>
+    <Grid>
+
+
+        <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel }">
                 <views:HomeView />
             </DataTemplate>
@@ -23,7 +26,20 @@
             <DataTemplate DataType="{x:Type viewmodels:LoginViewModel }">
                 <views:LoginView />
             </DataTemplate>
-        </ContentControl.Resources>
-    </ContentControl>
+            <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
+                <components:Layout />
+            </DataTemplate>
+        </Grid.Resources>
+
+
+        <custom:Modal Panel.ZIndex="100" IsOpen="{Binding IsOpen}">
+            <ContentControl Content="{Binding CurrentModalViewModel}" />
+        </custom:Modal>
+        
+
+        <ContentControl Content="{Binding CurrentViewModel}" />
+    </Grid>
+    
+    
 </Window>
     

@@ -5,17 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AdvanceNavigation.ViewModels;
+using AdvanceNavigation.Services;
 
 
 namespace AdvanceNavigation.Commands
 {
-    public class NavigateCommand<TViewModel> : CommandBase
-
-        where TViewModel : ViewModelBase
+    public class NavigateCommand : CommandBase
     {
-        private readonly NavigationService<TViewModel> _navigation_service;
+        private readonly INavigationService _navigation_service;
 
-        public NavigateCommand(NavigationService<TViewModel> navigationService)
+        public NavigateCommand(INavigationService navigationService)
         {
             _navigation_service = navigationService;
         }

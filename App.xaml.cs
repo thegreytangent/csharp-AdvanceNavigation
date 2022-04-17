@@ -8,6 +8,7 @@ using System.Windows;
 using AdvanceNavigation.ViewModels;
 using AdvanceNavigation.Stores;
 using AdvanceNavigation.Commands;
+using AdvanceNavigation.Services;
 
 namespace AdvanceNavigation
 {
@@ -19,60 +20,73 @@ namespace AdvanceNavigation
 
         private readonly AccountStore accountStore;
         private readonly NavigationStore navigationStore;
-        private NavigationBarViewModel navigationBarViewModel;
-
-
+        private readonly ModalNavigationStore modalNavigationStore;
+        
         public App() {
-            this.navigationStore = new NavigationStore();
-            this.accountStore = new AccountStore();
-            this.navigationBarViewModel = new NavigationBarViewModel(
-                accountStore,
-                CreateHomeNavigationService(),
-                CreateAccountNavigationService(),
-                CreateLoginNavigationService()
-                );
+            accountStore = new AccountStore();
+            navigationStore = new NavigationStore();
+            modalNavigationStore = new ModalNavigationStore();
         }
+
 
 
         protected override void OnStartup(StartupEventArgs e)
         {
 
-            NavigationService<HomeViewModel> navService = this.CreateHomeNavigationService();
-            navService.Navigate();
-
-            //first view/model to show
-            this.navigationStore.CurrentViewModel = new HomeViewModel(
-                this.navigationBarViewModel, CreateLoginNavigationService()
-             ); 
+            INavigationService homeNavService = this.CreateHomeNavigationService();
+            homeNavService.Navigate();
 
             MainWindow = new MainWindow() {
-                DataContext = new MainViewModel(this.navigationStore)
-        };
+                DataContext = new MainViewModel(navigationStore, modalNavigationStore)
+            };
             MainWindow.Show();
             base.OnStartup(e);
         }
 
-        private NavigationService<HomeViewModel> CreateHomeNavigationService()
+        private NavigationBarViewModel createNavigationBarViewModel() 
         {
-           return new NavigationService<HomeViewModel>(this.navigationStore, () => 
-           new HomeViewModel( this.navigationBarViewModel, CreateLoginNavigationService() )
+            return new NavigationBarViewModel(
+                     accountStore,
+                     CreateHomeNavigationService(),
+                     CreateAccountNavigationService(),
+                     CreateLoginNavigationService()
+                     );
+        }
+
+        private INavigationService CreateHomeNavigationService()
+        {
+           return new LayoutNavigationService<HomeViewModel>(
+               navigationStore, 
+               () => new HomeViewModel(CreateLoginNavigationService()),
+               createNavigationBarViewModel
            );
         }
 
-
-        private NavigationService<LoginViewModel> CreateLoginNavigationService()
+        private INavigationService CreateAccountNavigationService()
         {
-            return new NavigationService<LoginViewModel>(this.navigationStore, () =>
-           new LoginViewModel(this.accountStore, CreateAccountNavigationService())
+            return new LayoutNavigationService<AccountViewModel>(
+                navigationStore,
+                () => new AccountViewModel(this.accountStore, CreateHomeNavigationService()),
+                createNavigationBarViewModel
+               );
+        }
+
+
+        private INavigationService CreateLoginNavigationService()
+        {
+
+            CompositeNavigationService composite = new CompositeNavigationService(
+                new CloseModalNavigationService(modalNavigationStore),
+                CreateAccountNavigationService()
+                );
+            
+            return new ModalNavigationService<LoginViewModel>(
+               modalNavigationStore, 
+               () => new LoginViewModel(this.accountStore, composite)
            );
         }
 
-        private NavigationService<AccountViewModel> CreateAccountNavigationService()
-        {
-            return new NavigationService<AccountViewModel>(this.navigationStore, () =>
-          new AccountViewModel(this.navigationBarViewModel, this.accountStore, CreateHomeNavigationService())
-          );
-        }
+        
 
     }
 }

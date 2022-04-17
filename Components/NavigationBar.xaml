@@ -49,6 +49,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         
         <TextBlock 
@@ -78,6 +79,14 @@
             Command="{Binding NavigateAccountCommand}"
             Visibility="{Binding isLoggedIn,Converter={StaticResource BooleanToVisibilityConverter}}"
             Content="Account"
+        />
+
+        <Button 
+            Grid.Column="4"
+            Margin="10 0 0 0"
+            Command="{Binding LogoutCommand}"
+            Visibility="{Binding isLoggedIn,Converter={StaticResource BooleanToVisibilityConverter}}"
+            Content="Logout"
         />
 
     </Grid>

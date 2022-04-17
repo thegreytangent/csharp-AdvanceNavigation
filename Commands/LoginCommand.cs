@@ -15,12 +15,12 @@ namespace AdvanceNavigation.Commands
     {
         private readonly AccountStore accountStore;
         private readonly LoginViewModel viewModel;
-        private readonly NavigationService<AccountViewModel> navigationService;
-
+        private readonly INavigationService navigationService;
+        
         public LoginCommand(
             LoginViewModel _viewModel,
             AccountStore _accountStore,
-            NavigationService<AccountViewModel> _navigationService
+            INavigationService _navigationService
             )
         {
 
