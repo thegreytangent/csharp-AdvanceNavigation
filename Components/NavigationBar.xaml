@@ -50,6 +50,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         
         <TextBlock 
@@ -69,12 +70,21 @@
         <Button 
             Grid.Column="2"
             Margin="10 0 0 0"
+            Command="{Binding NavigatePeopleListingCommand}"
+            Content="People"
+        />
+        
+        
+
+        <Button 
+            Grid.Column="3"
+            Margin="10 0 0 0"
             Command="{Binding NavigateLoginCommand}"
             Content="Login"
         />
 
         <Button 
-            Grid.Column="3"
+            Grid.Column="4"
             Margin="10 0 0 0"
             Command="{Binding NavigateAccountCommand}"
             Visibility="{Binding isLoggedIn,Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -82,7 +92,7 @@
         />
 
         <Button 
-            Grid.Column="4"
+            Grid.Column="5"
             Margin="10 0 0 0"
             Command="{Binding LogoutCommand}"
             Visibility="{Binding isLoggedIn,Converter={StaticResource BooleanToVisibilityConverter}}"

@@ -44,8 +44,8 @@ namespace AdvanceNavigation
             );
 
             services.AddTransient<LoginViewModel>(CreateLoginViewModel);
-          
 
+            services.AddTransient<PeopleListingViewModel>(s => new PeopleListingViewModel());
 
             services.AddSingleton<AccountStore>();
             services.AddSingleton<NavigationStore>();
@@ -102,8 +102,18 @@ namespace AdvanceNavigation
                      serviceProvider.GetRequiredService<AccountStore>(),
                      CreateHomeNavigationService(serviceProvider),
                      CreateAccountNavigationService(serviceProvider),
-                     CreateLoginNavigationService(serviceProvider)
+                     CreateLoginNavigationService(serviceProvider),
+                     CreatePeopleListingNavigationService(serviceProvider)
                      );
+        }
+
+        private INavigationService CreatePeopleListingNavigationService(IServiceProvider serviceProvider)
+        {
+            return new LayoutNavigationService<PeopleListingViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<PeopleListingViewModel>(),
+                () => serviceProvider.GetRequiredService<NavigationBarViewModel>()
+               );
         }
 
         private INavigationService CreateHomeNavigationService(IServiceProvider serviceProvider)

@@ -20,13 +20,16 @@ namespace AdvanceNavigation.ViewModels
 
         public ICommand LogoutCommand { get;  }
 
+        public ICommand NavigatePeopleListingCommand { get;  }
+
         public bool isLoggedIn => store.IsLoggedIn;
 
         public NavigationBarViewModel(
             AccountStore _accountStore,
             INavigationService homeNavigationService,
             INavigationService accountNavigationService,
-            INavigationService loginNavigationService
+            INavigationService loginNavigationService,
+            INavigationService peopleListingNavigationService
             )
         {
             store = _accountStore;
@@ -35,6 +38,7 @@ namespace AdvanceNavigation.ViewModels
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);
             NavigateAccountCommand = new NavigateCommand(accountNavigationService);
             NavigateLoginCommand = new NavigateCommand(loginNavigationService);
+            NavigatePeopleListingCommand = new NavigateCommand(peopleListingNavigationService);
 
             store.CurrentAccountChanged += OnCurrentAccountChanged;
         
