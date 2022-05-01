@@ -45,8 +45,8 @@ namespace AdvanceNavigation
 
             services.AddTransient<LoginViewModel>(CreateLoginViewModel);
 
-            services.AddTransient<PeopleListingViewModel>(s => new PeopleListingViewModel());
-
+            services.AddTransient<PeopleListingViewModel>(s => new PeopleListingViewModel( CreateAddPersonNavigationService(s) ));
+            services.AddTransient<AddPersonViewModel>(s => new AddPersonViewModel());
             services.AddSingleton<AccountStore>();
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<ModalNavigationStore>();
@@ -63,6 +63,7 @@ namespace AdvanceNavigation
 
         }
 
+       
         private LoginViewModel CreateLoginViewModel(IServiceProvider s)
         {
             ModalNavigationStore modalNavigationStore = s.GetRequiredService<ModalNavigationStore>();
@@ -145,7 +146,16 @@ namespace AdvanceNavigation
            );
         }
 
-        
+        private INavigationService CreateAddPersonNavigationService(IServiceProvider serviceProvider)
+        {
+            return new ModalNavigationService<AddPersonViewModel>(
+                serviceProvider.GetRequiredService<ModalNavigationStore>(),
+                () => serviceProvider.GetRequiredService<AddPersonViewModel>()
+            );
+        }
+
+
+
 
     }
 }
